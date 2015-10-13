@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+
+qemu-system-i386 -curses target/myos.iso

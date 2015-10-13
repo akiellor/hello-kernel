@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+sudo apt-get -y update
+sudo apt-get -y install automake g++ make gawk qemu
+
+sudo -u vagrant /vagrant/script/build_cross_gcc /home/vagrant/build

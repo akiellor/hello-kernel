@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+export PATH="$HOME/build/opt/cross/bin:$PATH"
+
+mkdir -p target
+i686-elf-as src/boot.s -o target/boot.o
+i686-elf-gcc -c src/kernel.c++ -o target/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -T src/linker.ld -o target/myos.bin -ffreestanding -O2 -nostdlib target/boot.o target/kernel.o -lgcc
+
+mkdir -p target/isodir/boot/grub
+cp target/myos.bin target/isodir/boot/myos.bin
+cp src/grub.cfg target/isodir/boot/grub/grub.cfg
+grub-mkrescue -o target/myos.iso target/isodir
