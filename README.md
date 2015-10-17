@@ -6,6 +6,6 @@
 $ vagrant up
 $ vagrant ssh
 $ cd /vagrant
-$ ./script/build
-$ ./script/run
+$ make all
+$ make run
 ```

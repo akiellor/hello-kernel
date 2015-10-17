@@ -1,5 +1,0 @@
-#!/bin/sh
-
-set -e
-
-qemu-system-i386 -serial file:target/serial.out -curses target/myos.iso
