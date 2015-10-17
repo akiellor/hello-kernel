@@ -2,4 +2,4 @@
 
 set -e
 
-qemu-system-i386 -curses target/myos.iso
+qemu-system-i386 -serial file:target/serial.out -curses target/myos.iso
