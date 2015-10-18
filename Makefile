@@ -16,10 +16,10 @@ ${OUTDIR}/myos.bin: ${OUTDIR}/boot.o ${OUTDIR}/kernel.o
 	$(CC) -T src/linker.ld -o $@ -ffreestanding -O2 -nostdlib -lgcc $?
 
 program: ${OUTDIR}/myos.bin
-	mkdir -p target/isodir/boot/grub
-	cp target/myos.bin target/isodir/boot/myos.bin
-	cp src/grub.cfg target/isodir/boot/grub/grub.cfg
-	grub-mkrescue -o target/myos.iso target/isodir
+	mkdir -p ${OUTDIR}/isodir/boot/grub
+	cp ${OUTDIR}/myos.bin ${OUTDIR}/isodir/boot/myos.bin
+	cp src/grub.cfg ${OUTDIR}/isodir/boot/grub/grub.cfg
+	grub-mkrescue -o ${OUTDIR}/myos.iso ${OUTDIR}/isodir
 
 ${OUTDIR}/%.o: src/%.s
 	$(AS) $(ASFLAGS) $< -o $@
