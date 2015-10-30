@@ -96,6 +96,27 @@ void terminal_writestring(const char* data) {
 	for (size_t i = 0; i < datalen; i++)
 		terminal_putchar(data[i]);
 }
+
+/* The I/O ports */
+#define FB_COMMAND_PORT         0x3D4
+#define FB_DATA_PORT            0x3D5
+
+/* The I/O port commands */
+#define FB_HIGH_BYTE_COMMAND    14
+#define FB_LOW_BYTE_COMMAND     15
+
+/** fb_move_cursor:
+ *  Moves the cursor of the framebuffer to the given position
+ *
+ *  @param pos The new position of the cursor
+ */
+//void fb_move_cursor(unsigned short pos)
+//{
+  //outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
+  //outb(FB_DATA_PORT,    ((pos >> 8) & 0x00FF));
+  //outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
+  //outb(FB_DATA_PORT,    pos & 0x00FF);
+//}
  
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
@@ -109,5 +130,7 @@ void kernel_main() {
          * This is normal.
          */
 	terminal_writestring("Hello, kernel World!\n");
+
+  //fb_move_cursor(180);
 }
 

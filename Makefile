@@ -1,10 +1,12 @@
 CC=i686-elf-gcc
 CCFLAGS=-c -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-AS=i686-elf-as
-ASFLAGS=
+AS=nasm
+ASFLAGS=-felf32
 
 OUTDIR=target
 MKDIR_P=mkdir -p
+
+.PHONY: directories
 
 directories: ${OUTDIR}
 
@@ -12,7 +14,7 @@ ${OUTDIR}:
 	${MKDIR_P} ${OUTDIR}
 
 
-${OUTDIR}/myos.bin: ${OUTDIR}/boot.o ${OUTDIR}/kernel.o
+${OUTDIR}/myos.bin: ${OUTDIR}/multiboot_header.o ${OUTDIR}/boot.o ${OUTDIR}/kernel.o
 	$(CC) -T src/linker.ld -o $@ -ffreestanding -O2 -nostdlib -lgcc $?
 
 program: ${OUTDIR}/myos.bin
@@ -21,7 +23,7 @@ program: ${OUTDIR}/myos.bin
 	cp src/grub.cfg ${OUTDIR}/isodir/boot/grub/grub.cfg
 	grub-mkrescue -o ${OUTDIR}/myos.iso ${OUTDIR}/isodir
 
-${OUTDIR}/%.o: src/%.s
+${OUTDIR}/%.o: src/%.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
 ${OUTDIR}/%.o: src/%.c
@@ -33,4 +35,4 @@ clean:
 all: directories program
 
 run:
-	qemu-system-i386 -serial file:${OUTDIR}/serial.out -curses ${OUTDIR}/myos.iso
+  qemu-system-i386 -serial file:${OUTDIR}/serial.out -curses ${OUTDIR}/myos.iso
