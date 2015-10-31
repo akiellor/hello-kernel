@@ -13,8 +13,7 @@ directories: ${OUTDIR}
 ${OUTDIR}:
 	${MKDIR_P} ${OUTDIR}
 
-
-${OUTDIR}/myos.bin: ${OUTDIR}/multiboot_header.o ${OUTDIR}/boot.o ${OUTDIR}/kernel.o
+${OUTDIR}/myos.bin: ${OUTDIR}/boot.o ${OUTDIR}/kernel.o ${OUTDIR}/io.o
 	$(CC) -T src/linker.ld -o $@ -ffreestanding -O2 -nostdlib -lgcc $?
 
 program: ${OUTDIR}/myos.bin

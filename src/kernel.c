@@ -13,7 +13,7 @@
 #if !defined(__i386__)
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
- 
+
 /* Hardware text mode color constants. */
 enum vga_color {
 	COLOR_BLACK = 0,
@@ -97,30 +97,38 @@ void terminal_writestring(const char* data) {
 		terminal_putchar(data[i]);
 }
 
-/* The I/O ports */
-#define FB_COMMAND_PORT         0x3D4
-#define FB_DATA_PORT            0x3D5
-
-/* The I/O port commands */
-#define FB_HIGH_BYTE_COMMAND    14
-#define FB_LOW_BYTE_COMMAND     15
-
-/** fb_move_cursor:
- *  Moves the cursor of the framebuffer to the given position
- *
- *  @param pos The new position of the cursor
- */
-//void fb_move_cursor(unsigned short pos)
-//{
-  //outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
-  //outb(FB_DATA_PORT,    ((pos >> 8) & 0x00FF));
-  //outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
-  //outb(FB_DATA_PORT,    pos & 0x00FF);
-//}
+#define PORT 0x3f8   /* COM1 */
  
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
+void init_serial() {
+  outb(PORT + 1, 0x00);    // Disable all interrupts
+  outb(PORT + 3, 0x80);    // Enable DLAB (set baud rate divisor)
+  outb(PORT + 0, 0x03);    // Set divisor to 3 (lo byte) 38400 baud
+  outb(PORT + 1, 0x00);    //                  (hi byte)
+  outb(PORT + 3, 0x03);    // 8 bits, no parity, one stop bit
+  outb(PORT + 2, 0xC7);    // Enable FIFO, clear them, with 14-byte threshold
+  outb(PORT + 4, 0x0B);    // IRQs enabled, RTS/DSR set
+}
+
+int serial_received() {
+  return inb(PORT + 5) & 1;
+}
+
+char read_serial() {
+  while (serial_received() == 0);
+
+  return inb(PORT);
+}
+
+int is_transmit_empty() {
+  return inb(PORT + 5) & 0x20;
+}
+
+void write_serial(char a) {
+  while (is_transmit_empty() == 0);
+
+  outb(PORT,a);
+}
+
 void kernel_main() {
 	/* Initialize terminal interface */
 	terminal_initialize();
@@ -131,6 +139,8 @@ void kernel_main() {
          */
 	terminal_writestring("Hello, kernel World!\n");
 
-  //fb_move_cursor(180);
+  init_serial();
+
+  write_serial('A');
 }
 
