@@ -1,0 +1,7 @@
+#!/bin/sh
+while inotifywait -r src; do
+  killall qemu-system-i386
+  make clean
+  make all
+  qemu-system-i386 -serial stdio -curses -kernel target/myos.bin &
+done
