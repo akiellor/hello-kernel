@@ -1,4 +1,7 @@
+#include <stddef.h>
+#include <stdint.h>
 #include "./io.h"
+#include "./string.h"
 
 #define PORT 0x3f8   /* COM1 */
 
@@ -30,6 +33,12 @@ void write_serial(char a) {
   while (is_transmit_empty() == 0);
 
   outb(PORT,a);
+}
+
+void serial_writestring(const char* data) {
+	size_t datalen = strlen(data);
+	for (size_t i = 0; i < datalen; i++)
+		write_serial(data[i]);
 }
 
 

@@ -1,4 +1,4 @@
- #ifndef _SERIAL_H
+#ifndef _SERIAL_H
 #define _SERIAL_H 1
 
 #include <stddef.h>
@@ -13,5 +13,7 @@ char read_serial();
 int is_transmit_empty();
 
 void write_serial(char a);
+
+void serial_writestring(const char* data);
 
 #endif

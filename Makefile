@@ -1,5 +1,5 @@
 CC=i686-elf-gcc
-CCFLAGS=-c -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CCFLAGS=-g -c -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 AS=nasm
 ASFLAGS=-felf32
 
@@ -13,7 +13,7 @@ directories: ${OUTDIR}
 ${OUTDIR}:
 	${MKDIR_P} ${OUTDIR}
 
-${OUTDIR}/myos.bin: ${OUTDIR}/boot.o ${OUTDIR}/kernel.o ${OUTDIR}/io.o ${OUTDIR}/serial.o
+${OUTDIR}/myos.bin: ${OUTDIR}/boot.o ${OUTDIR}/kernel.o ${OUTDIR}/io.o ${OUTDIR}/serial.o ${OUTDIR}/gdt.o ${OUTDIR}/idt.o ${OUTDIR}/irq.o ${OUTDIR}/isrs.o ${OUTDIR}/framebuffer.o ${OUTDIR}/string.o
 	$(CC) -T src/linker.ld -o $@ -ffreestanding -O2 -nostdlib -lgcc $?
 
 program: ${OUTDIR}/myos.bin
