@@ -5,8 +5,6 @@
 *  Notes: No warranty expressed or implied. Use at own risk. */
 #include "./idt.h"
 #include "./io.h"
-#include "./idt.h"
-#include "./serial.h"
 
 /* These are own ISRs that point to our special IRQ handler
 *  instead of the regular 'fault_handler' function */
