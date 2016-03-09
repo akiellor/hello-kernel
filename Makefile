@@ -33,5 +33,5 @@ clean:
 
 all: directories program
 
-run:
-  qemu-system-i386 -serial file:${OUTDIR}/serial.out -curses ${OUTDIR}/myos.iso
+run: all
+	qemu-system-i386 -serial file:${OUTDIR}/serial.out -curses -kernel ${OUTDIR}/myos.bin
