@@ -6,4 +6,5 @@ sudo apt-get -y update
 sudo apt-get -y install automake g++ make gawk qemu xorriso nasm
 
 sudo -u vagrant /vagrant/script/build_cross_gcc /home/vagrant/build
-sudo -u vagrant bash -c 'echo "export PATH=\"$HOME/build/opt/cross/bin:\$PATH\"" > ~/.bash_profile'
+sudo -u vagrant bash -c 'echo "export PATH=\"/home/vagrant/build/opt/cross/bin:\$PATH\"" > /home/vagrant/.bash_profile'
+sudo -u vagrant chown vagrant -R /home/vagrant
