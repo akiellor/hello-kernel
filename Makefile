@@ -4,6 +4,7 @@ AS=nasm
 ASFLAGS=-felf32
 
 OUTDIR=target
+TESTDIR=test
 MKDIR_P=mkdir -p
 
 .PHONY: directories
@@ -35,3 +36,7 @@ all: directories program
 
 run: all
 	qemu-system-i386 -serial file:${OUTDIR}/serial.out -curses -kernel ${OUTDIR}/myos.bin
+
+test:
+	gcc -std=c99 -I deps/tap.c deps/tap.c/tap.c ${TESTDIR}/queue_test.c -o ${OUTDIR}/tests
+	${OUTDIR}/tests
